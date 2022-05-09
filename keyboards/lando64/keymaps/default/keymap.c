@@ -202,6 +202,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case RGBTOG:
       #ifdef RGBLIGHT_ENABLE
         if (record->event.pressed) {
+          if(nrf_gpio_pin_out_read(POWER_PIN)==1)
+          {
+              NRF_LOG_INFO("turn on rbg");
+              nrf_gpio_pin_clear(POWER_PIN);
+          }
+          else
+          {
+              NRF_LOG_INFO("turn off rbg");
+              nrf_gpio_pin_set(POWER_PIN);
+          }
           // if(!rgblight_config.enable)
           // {
           //   eeconfig_update_rgblight_default();
@@ -210,19 +220,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           // else{
           //   rgblight_disable();
           // }
-          if(rgblight_config.enable)
-          {
-                // NRF_LOG_INFO("turn off rbg");
-                nrf_gpio_pin_set(POWER_PIN);
-                rgblight_disable();
+          // if(rgblight_config.enable)
+          // {
+          //       // NRF_LOG_INFO("turn off rbg");
+          //       nrf_gpio_pin_set(POWER_PIN);
+          //       rgblight_disable();
 
-          }
-          else
-          {
-            // NRF_LOG_INFO("turn on rbg");
-            nrf_gpio_pin_clear(POWER_PIN);
-            rgblight_enable();
-          }
+          // }
+          // else
+          // {
+          //   // NRF_LOG_INFO("turn on rbg");
+          //   nrf_gpio_pin_clear(POWER_PIN);
+          //   rgblight_enable();
+          // }
         }
       #endif
       break;
@@ -245,8 +255,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 void led_set_user(uint8_t usb_led){
  if (usb_led & (1 << USB_LED_CAPS_LOCK))
    {
+     NRF_LOG_INFO("SET CAPS LED");
       nrf_gpio_pin_set(CAPS_LED);
    }else {
+     NRF_LOG_INFO("CLEAR CAPS LED");
       nrf_gpio_pin_clear(CAPS_LED);
    }
 }

@@ -202,7 +202,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case RGBTOG:
       #ifdef RGBLIGHT_ENABLE
         if (record->event.pressed) {
-          if(nrf_gpio_pin_out_read(POWER_PIN))
+          if(nrf_gpio_pin_out_read(POWER_PIN)==1)
           {
               NRF_LOG_INFO("turn on rbg");
               nrf_gpio_pin_clear(POWER_PIN);
@@ -210,7 +210,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           else
           {
               NRF_LOG_INFO("turn off rbg");
-              nrf_gpio_pin_clear(POWER_PIN);
+              nrf_gpio_pin_set(POWER_PIN);
           }
           // if(!rgblight_config.enable)
           // {
