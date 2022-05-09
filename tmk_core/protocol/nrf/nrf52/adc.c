@@ -35,7 +35,7 @@ static void adc_event_handler(nrf_drv_saadc_evt_t const *p_event) {}
 
 void adc_init() {
   nrf_drv_saadc_config_t adccfg = NRF_DRV_SAADC_DEFAULT_CONFIG;
-  adccfg.resolution = NRF_SAADC_RESOLUTION_8BIT;
+  adccfg.resolution = NRF_SAADC_RESOLUTION_10BIT;
   nrf_drv_saadc_init(&adccfg, adc_event_handler);
   nrf_saadc_channel_config_t pincfg = NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(APP_VCC_PIN);
   nrf_drv_saadc_channel_init(0, &pincfg);
@@ -70,6 +70,7 @@ uint16_t get_vcc() {
 #define V_BAT ((V_MAX * BATTERY_R2) / (BATTERY_R1 + BATTERY_R2))
   return ((uint32_t) v * 6 * 600 / 255) * V_MAX / V_BAT;
 #else
-  return ((uint32_t) v * 6 * 600 / 255);
+  // return ((uint32_t) v * 6 * 600 / 255);
+  return (( (v*3600.0) / 1024.0 ) / (2000.0 / (2000.0+820.0) )*(4200.0/4660.0));
 #endif
 }

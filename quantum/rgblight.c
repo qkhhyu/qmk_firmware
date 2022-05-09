@@ -18,12 +18,21 @@
   #include <avr/eeprom.h>
   #include <avr/interrupt.h>
 #endif
+#ifdef STM32_EEPROM_ENABLE
+#    include "hal.h"
+#    include "eeprom.h"
+#    include "eeprom_stm32.h"
+#endif
 #include "wait.h"
 #include "progmem.h"
 #include "timer.h"
 #include "rgblight.h"
 #include "debug.h"
 #include "led_tables.h"
+
+#ifdef PROTOCOL_NRF
+#include "eeprom.h"
+#endif
 
 #ifndef RGBLIGHT_LIMIT_VAL
 #define RGBLIGHT_LIMIT_VAL 255
@@ -119,14 +128,16 @@ void setrgb(uint8_t r, uint8_t g, uint8_t b, LED_TYPE *led1) {
 
 
 uint32_t eeconfig_read_rgblight(void) {
-  #ifdef __AVR__
+  // #ifdef __AVR__
+  #if defined(__AVR__) || defined(STM32_EEPROM_ENABLE) || defined(PROTOCOL_ARM_ATSAM) || defined(EEPROM_SIZE)
     return eeprom_read_dword(EECONFIG_RGBLIGHT);
   #else
     return 0;
   #endif
 }
 void eeconfig_update_rgblight(uint32_t val) {
-  #ifdef __AVR__
+  // #ifdef __AVR__
+  #if defined(__AVR__) || defined(STM32_EEPROM_ENABLE) || defined(PROTOCOL_ARM_ATSAM) || defined(EEPROM_SIZE)
     eeprom_update_dword(EECONFIG_RGBLIGHT, val);
   #endif
 }

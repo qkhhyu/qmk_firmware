@@ -57,7 +57,7 @@ void adc_init() {
 void adc_start() {
 //  nrf_adc_enable();
   nrf_drv_adc_channel_t m_channel_config = {{{
-      .resolution = NRF_ADC_CONFIG_RES_8BIT,
+      .resolution = NRF_ADC_CONFIG_RES_10BIT,
       .input      = NRF_ADC_CONFIG_SCALING_SUPPLY_ONE_THIRD,
       .reference  = NRF_ADC_CONFIG_REF_VBG,
       .ain        = (NRF_ADC_CONFIG_INPUT_DISABLED)
@@ -68,5 +68,5 @@ void adc_start() {
 }
 
 uint16_t get_vcc() {
-  return ((uint32_t)adc_buffer[0]*3*1200/255);
+  return ((uint32_t)adc_buffer[0]*3*1200/1024);
 }
