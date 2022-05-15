@@ -93,11 +93,14 @@ void nrfmicro_powerpin_switch(bool status)
 }
 
 void nrfmicro_init() {
+  rgblight_config_t config;
+  config.raw = eeconfig_read_rgblight();
   // configure pins
   nrf_gpio_cfg_output(POWER_PIN);
   nrf_gpio_cfg_output(CAPS_LED);
-  // nrf_gpio_cfg_input(SWITCH_PIN, NRF_GPIO_PIN_PULLDOWN);
-  nrfmicro_power_enable(false);
+
+	nrfmicro_power_enable(config.enable);
+
   nrf_delay_ms(100);
 
   // nrfmicro_power_enable(false);
@@ -139,4 +142,33 @@ void keyboard_post_init_kb()
   // {
   // 	nrfmicro_power_enable(true); //power pin
   // }
+}
+
+void sleep_mode_enter(void) {
+  extern const uint32_t row_pins[THIS_DEVICE_ROWS];
+  extern const uint32_t col_pins[THIS_DEVICE_COLS];
+  int i;
+
+  if (nrfx_power_usbstatus_get() == NRFX_POWER_USB_STATE_CONNECTED ||
+      nrfx_power_usbstatus_get() == NRFX_POWER_USB_STATE_READY) {
+    return;
+  }
+  nrfmicro_powerpin_switch(false);
+#if (DIODE_DIRECTION==ROW2COL)
+  for (i=0; i<THIS_DEVICE_COLS; i++) {
+    nrf_gpio_pin_clear(col_pins[i]);
+  }
+  for (i=0; i<THIS_DEVICE_ROWS; i++) {
+    nrf_gpio_cfg_sense_input(row_pins[i], NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_SENSE_LOW);
+  }
+#else
+  for (i=0; i<THIS_DEVICE_ROWS; i++) {
+    nrf_gpio_pin_clear(row_pins[i]);
+  }
+  for (i=0; i<THIS_DEVICE_COLS; i++) {
+    nrf_gpio_cfg_sense_input(col_pins[i], NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_SENSE_LOW);
+  }
+#endif
+
+  sd_power_system_off();
 }

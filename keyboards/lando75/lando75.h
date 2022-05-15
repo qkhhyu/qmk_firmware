@@ -26,6 +26,7 @@
 extern void bootloader_jump(void);
 extern void nrfmicro_init();
 extern void nrfmicro_update();
+extern void sleep_mode_enter(void);
 
 
 #endif /* KEYBOARDS_BLE_MICRO_TEST_BLE_MICRO_TEST_H_ */
