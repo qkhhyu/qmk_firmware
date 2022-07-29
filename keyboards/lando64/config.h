@@ -64,6 +64,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGBLIGHT_VAL_STEP 17
 // #define RGBLIGHT_LIMIT_VAL 120 /* The maximum brightness level */
 
+#define USE_BATTERY_PIN NRF_SAADC_INPUT_AIN2
+
 /*
  * Feature disable options
  *  These options are also useful to firmware size reduction.
