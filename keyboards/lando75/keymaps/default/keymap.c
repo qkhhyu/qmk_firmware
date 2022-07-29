@@ -52,6 +52,7 @@ enum custom_keycodes {
 
     RGBRST,
     RGBTOG,
+    KBDRST,
 };
 
 
@@ -93,7 +94,7 @@ SEL_USB,RGB_TOG,RGB_HUI,RGB_SAI,RGB_VAI,RGBTOG,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_
 KC_TAB,RGB_MOD,RGB_HUD,RGB_SAD,RGB_VAD,KC_NO,KC_NO,USB_EN,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,
 KC_TRNS,AD_WO_L,ENT_SLP,ENT_DFU,USB_DIS,BLE_DIS,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,
 KC_TRNS,KC_NO,BATT_LV,KC_NO,KC_NO,KC_NO,BLE_EN,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,
-KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,MO(1),KC_NO,KC_NO,KC_NO,KC_NO),
+KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_NO,KC_NO,KBDRST,KC_NO,KC_NO,KC_NO,MO(1),KC_NO,KC_NO,KC_NO,KC_NO),
 
 };
 // const uint16_t keymaps[][6][15] = {
@@ -235,6 +236,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           // }
         }
       #endif
+      break;
+      case KBDRST:
+      {
+        NVIC_SystemReset();
+      }
       break;
     }
   }
